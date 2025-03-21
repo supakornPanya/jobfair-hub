@@ -13,6 +13,7 @@ import Index from "./pages/Index";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Bookings from "./pages/Bookings";
+import Companies from "./pages/Companies";
 import Admin from "./pages/Admin";
 import Terms from "./pages/Terms";
 import Privacy from "./pages/Privacy";
@@ -44,6 +45,14 @@ const App = () => (
                 element={
                   <Layout>
                     <Bookings />
+                  </Layout>
+                }
+              />
+              <Route
+                path="/companies"
+                element={
+                  <Layout>
+                    <Companies />
                   </Layout>
                 }
               />

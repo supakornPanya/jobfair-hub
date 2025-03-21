@@ -58,12 +58,20 @@ const Index = () => {
           </motion.p>
           <motion.div variants={itemVariants} className="flex flex-wrap justify-center gap-4 pt-4">
             {user ? (
-              <Button size="lg" asChild>
-                <Link to="/bookings">
-                  <CalendarIcon className="w-5 h-5 mr-2" />
-                  Book Interviews
-                </Link>
-              </Button>
+              <>
+                <Button size="lg" asChild>
+                  <Link to="/bookings">
+                    <CalendarIcon className="w-5 h-5 mr-2" />
+                    Book Interviews
+                  </Link>
+                </Button>
+                <Button size="lg" variant="outline" asChild>
+                  <Link to="/companies">
+                    <BuildingIcon className="w-5 h-5 mr-2" />
+                    Browse Companies
+                  </Link>
+                </Button>
+              </>
             ) : (
               <>
                 <Button size="lg" asChild>
@@ -75,6 +83,12 @@ const Index = () => {
                 <Button size="lg" variant="outline" asChild>
                   <Link to="/login">
                     Sign In
+                  </Link>
+                </Button>
+                <Button size="lg" variant="secondary" asChild>
+                  <Link to="/companies">
+                    <BuildingIcon className="w-5 h-5 mr-2" />
+                    Browse Companies
                   </Link>
                 </Button>
               </>

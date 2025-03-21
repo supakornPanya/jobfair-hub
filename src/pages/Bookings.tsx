@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useBooking } from "@/context/BookingContext";
@@ -44,6 +43,7 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { CalendarIcon, PlusIcon, Loader2, InfoIcon, ExternalLinkIcon, PhoneIcon, MapPinIcon } from "lucide-react";
 import { InterviewSession, Company } from "@/types";
 import { cn } from "@/lib/utils";
+import BookingList from "@/components/BookingList";
 
 const Bookings = () => {
   const { user } = useAuth();
@@ -68,11 +68,9 @@ const Bookings = () => {
   
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // Define the date range for the job fair
   const minDate = new Date("2022-05-10");
   const maxDate = new Date("2022-05-13");
 
-  // Load bookings and companies on component mount
   useEffect(() => {
     const loadData = async () => {
       await getUserBookings();
@@ -91,7 +89,6 @@ const Bookings = () => {
     loadData();
   }, [getUserBookings, getCompanies]);
 
-  // Handle creating a new booking
   const handleCreateBooking = async () => {
     if (!newBookingCompanyId || !newBookingDate) return;
     
@@ -111,7 +108,6 @@ const Bookings = () => {
     }
   };
 
-  // Handle updating a booking
   const handleUpdateBooking = async () => {
     if (!selectedBooking || !editBookingCompanyId || !editBookingDate) return;
     
@@ -133,7 +129,6 @@ const Bookings = () => {
     }
   };
 
-  // Handle deleting a booking
   const handleDeleteBooking = async () => {
     if (!selectedBooking) return;
     
@@ -149,7 +144,6 @@ const Bookings = () => {
     }
   };
 
-  // Set up edit dialog with selected booking data
   const openEditDialog = (booking: InterviewSession) => {
     setSelectedBooking(booking);
     setEditBookingCompanyId(booking.companyId);
@@ -157,19 +151,16 @@ const Bookings = () => {
     setIsEditDialogOpen(true);
   };
 
-  // Set up delete dialog with selected booking
   const openDeleteDialog = (booking: InterviewSession) => {
     setSelectedBooking(booking);
     setIsDeleteDialogOpen(true);
   };
 
-  // Open company details dialog
   const openCompanyDialog = (company: Company) => {
     setSelectedCompany(company);
     setIsCompanyDialogOpen(true);
   };
 
-  // Format date for display
   const formatDate = (dateString: string) => {
     const date = parseISO(dateString);
     return format(date, "MMM d, yyyy 'at' h:mm a");
@@ -274,12 +265,16 @@ const Bookings = () => {
                     </Popover>
                   </div>
                 </div>
+                
+                <div className="mt-4 pt-4 border-t">
+                  <BookingList bookings={bookings} isLoading={isLoading} />
+                </div>
               </div>
               <DialogFooter>
                 <Button
                   type="submit"
                   onClick={handleCreateBooking}
-                  disabled={!newBookingCompanyId || !newBookingDate || isSubmitting}
+                  disabled={!newBookingCompanyId || !newBookingDate || isSubmitting || bookings.length >= 3}
                 >
                   {isSubmitting ? (
                     <>
@@ -399,7 +394,6 @@ const Bookings = () => {
         )}
       </motion.div>
 
-      {/* Edit Dialog */}
       <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
         <DialogContent className="sm:max-w-[500px]">
           <DialogHeader>
@@ -467,6 +461,13 @@ const Bookings = () => {
                 </Popover>
               </div>
             </div>
+            
+            <div className="mt-4 pt-4 border-t">
+              <BookingList 
+                bookings={bookings.filter(b => selectedBooking && b.id !== selectedBooking.id)} 
+                isLoading={isLoading} 
+              />
+            </div>
           </div>
           <DialogFooter>
             <Button
@@ -493,7 +494,6 @@ const Bookings = () => {
         </DialogContent>
       </Dialog>
 
-      {/* Delete Confirmation Dialog */}
       <Dialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
@@ -528,7 +528,6 @@ const Bookings = () => {
         </DialogContent>
       </Dialog>
 
-      {/* Company Details Dialog */}
       <Dialog open={isCompanyDialogOpen} onOpenChange={setIsCompanyDialogOpen}>
         <DialogContent className="sm:max-w-[550px]">
           <DialogHeader>
@@ -590,3 +589,4 @@ const Bookings = () => {
 };
 
 export default Bookings;
+
