@@ -14,6 +14,9 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Bookings from "./pages/Bookings";
 import Companies from "./pages/Companies";
+import CompanyBooking from "./pages/CompanyBooking";
+import UserBookings from "./pages/UserBookings";
+import EditBooking from "./pages/EditBooking";
 import Admin from "./pages/Admin";
 import Terms from "./pages/Terms";
 import Privacy from "./pages/Privacy";
@@ -30,6 +33,7 @@ const App = () => (
           <Sonner />
           <BrowserRouter>
             <Routes>
+              {/* Public Routes */}
               <Route
                 path="/"
                 element={
@@ -41,14 +45,6 @@ const App = () => (
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
               <Route
-                path="/bookings"
-                element={
-                  <Layout>
-                    <Bookings />
-                  </Layout>
-                }
-              />
-              <Route
                 path="/companies"
                 element={
                   <Layout>
@@ -57,6 +53,42 @@ const App = () => (
                 }
               />
               <Route
+                path="/booking/:companyId"
+                element={
+                  <Layout>
+                    <CompanyBooking />
+                  </Layout>
+                }
+              />
+              <Route
+                path="/bookings"
+                element={
+                  <Layout>
+                    <Bookings />
+                  </Layout>
+                }
+              />
+              
+              {/* User Routes */}
+              <Route
+                path="/user"
+                element={
+                  <Layout>
+                    <UserBookings />
+                  </Layout>
+                }
+              />
+              <Route
+                path="/user/booking/:bookingId"
+                element={
+                  <Layout>
+                    <EditBooking />
+                  </Layout>
+                }
+              />
+              
+              {/* Admin Routes */}
+              <Route
                 path="/admin"
                 element={
                   <Layout>
@@ -64,6 +96,8 @@ const App = () => (
                   </Layout>
                 }
               />
+              
+              {/* Static Pages */}
               <Route
                 path="/terms"
                 element={
