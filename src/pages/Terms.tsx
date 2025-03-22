@@ -1,7 +1,7 @@
 
 import { motion } from "framer-motion";
 
-const Terms = () => {
+export default function Terms() {
   return (
     <div className="max-w-3xl mx-auto py-10">
       <motion.div
@@ -67,6 +67,4 @@ const Terms = () => {
       </motion.div>
     </div>
   );
-};
-
-export default Terms;
+}

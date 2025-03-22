@@ -36,7 +36,7 @@ const formSchema = z.object({
 
 type FormValues = z.infer<typeof formSchema>;
 
-const Login = () => {
+export default function Login() {
   const { login, isLoading } = useAuth();
   const navigate = useNavigate();
   const [serverError, setServerError] = useState<string | null>(null);
@@ -186,6 +186,4 @@ const Login = () => {
       </motion.div>
     </div>
   );
-};
-
-export default Login;
+}

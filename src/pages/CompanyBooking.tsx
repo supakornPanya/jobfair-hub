@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { format } from "date-fns";
+import { format, parseISO } from "date-fns";
 import { useBooking } from "@/context/BookingContext";
 import { useAuth } from "@/context/AuthContext";
 import { toast } from "@/hooks/use-toast";
@@ -19,11 +19,10 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { CalendarIcon, BuildingIcon, Loader2, MapPinIcon, PhoneIcon, ExternalLinkIcon } from "lucide-react";
-import { Company } from "@/types";
+import { Company, InterviewSession } from "@/types";
 import { cn } from "@/lib/utils";
-import BookingList from "@/components/BookingList";
 
-const CompanyBooking = () => {
+export default function CompanyBooking() {
   const { companyId } = useParams<{ companyId: string }>();
   const navigate = useNavigate();
   const { user } = useAuth();
@@ -37,6 +36,72 @@ const CompanyBooking = () => {
   // Define the date range for the job fair
   const minDate = new Date("2022-05-10");
   const maxDate = new Date("2022-05-13");
+
+  // BookingList Component
+  const BookingList = ({ bookings, isLoading = false }: { bookings: InterviewSession[], isLoading?: boolean }) => {
+    if (isLoading) {
+      return (
+        <div className="py-4 text-center text-muted-foreground">
+          Loading your bookings...
+        </div>
+      );
+    }
+
+    if (bookings.length === 0) {
+      return (
+        <div className="py-4 text-center text-muted-foreground">
+          You haven't booked any interviews yet.
+        </div>
+      );
+    }
+
+    const formatDate = (dateString: string) => {
+      const date = parseISO(dateString);
+      return format(date, "MMM d, yyyy");
+    };
+
+    const formatTime = (dateString: string) => {
+      const date = parseISO(dateString);
+      return format(date, "h:mm a");
+    };
+
+    return (
+      <div className="space-y-3">
+        <h3 className="font-medium">Your Current Bookings</h3>
+        <ul className="space-y-2">
+          {bookings.map((booking, index) => (
+            <motion.li
+              key={booking.id}
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: index * 0.1 }}
+              className="rounded-lg border bg-card p-3 shadow-sm"
+            >
+              <div className="flex flex-col space-y-1">
+                <div className="flex items-center">
+                  <BuildingIcon className="h-4 w-4 text-primary mr-2" />
+                  <span className="font-medium">{booking.company.name}</span>
+                </div>
+                <div className="flex items-center text-sm text-muted-foreground">
+                  <CalendarIcon className="h-3.5 w-3.5 mr-2" />
+                  <span>{formatDate(booking.date)}</span>
+                  <Clock className="h-3.5 w-3.5 mx-2" />
+                  <span>{formatTime(booking.date)}</span>
+                </div>
+              </div>
+            </motion.li>
+          ))}
+        </ul>
+        <div className="text-sm text-muted-foreground pt-1">
+          {bookings.length === 3 ? (
+            <p className="text-amber-500">You've reached the maximum of 3 bookings.</p>
+          ) : (
+            <p>You can book {3 - bookings.length} more interview{3 - bookings.length !== 1 ? 's' : ''}.</p>
+          )}
+        </div>
+      </div>
+    );
+  };
 
   // Redirect if user is not authenticated
   useEffect(() => {
@@ -304,6 +369,26 @@ const CompanyBooking = () => {
       </div>
     </div>
   );
-};
+}
 
-export default CompanyBooking;
+// Add the missing Clock component since we're using it in BookingList
+const Clock = ({ className, ...props }: React.SVGProps<SVGSVGElement> & { className?: string }) => {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={className}
+      {...props}
+    >
+      <circle cx="12" cy="12" r="10" />
+      <polyline points="12 6 12 12 16 14" />
+    </svg>
+  );
+};

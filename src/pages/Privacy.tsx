@@ -1,7 +1,7 @@
 
 import { motion } from "framer-motion";
 
-const Privacy = () => {
+export default function Privacy() {
   return (
     <div className="max-w-3xl mx-auto py-10">
       <motion.div
@@ -83,6 +83,4 @@ const Privacy = () => {
       </motion.div>
     </div>
   );
-};
-
-export default Privacy;
+}

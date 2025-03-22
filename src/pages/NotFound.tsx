@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 
-const NotFound = () => {
+export default function NotFound() {
   return (
     <div className="flex flex-col items-center justify-center min-h-[80vh] px-4 text-center">
       <motion.div
@@ -27,6 +27,4 @@ const NotFound = () => {
       </motion.div>
     </div>
   );
-};
-
-export default NotFound;
+}
